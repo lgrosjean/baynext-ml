@@ -8,9 +8,6 @@ dependencies = [
     "baynext-ml-server",
     "baynext-ml-training",
     "baynext-ml-utils",
-    "fastapi>=0.116.1",
-    "google-meridian>=1.1.4",
-    "typer>=0.16.0",
 ]
 
 [tool.uv.workspace]
