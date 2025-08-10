@@ -1,0 +1,96 @@
+name: baynext-local
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  admin:
+    image: adminer
+    restart: always
+    depends_on: 
+      - postgres
+    ports:
+      - "8080:8080"
+
+  mlflow:
+    container_name: baynext-ml-server
+    build:
+      context: .
+      dockerfile: docker/mlflow.Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - MLFLOW_HOST=${MLFLOW_HOST}
+      - MLFLOW_PORT=${MLFLOW_PORT}
+      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_ACCESS_KEY}
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9002
+      - MLFLOW_S3_IGNORE_TLS=true
+    command: mlflow server 
+    depends_on:
+      - postgres
+      - minio-setup
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+          ignore:
+            - node_modules/
+            - .git/
+        - action: rebuild
+          path: docker/mlflow.Dockerfile
+
+  api:
+    container_name: baynext-api
+    build:
+      context: ../baynext-api
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - postgres
+
+  minio:
+    restart: always
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9002:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY}
+      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_ACCESS_KEY}
+      - MINIO_STORAGE_USE_HTTPS=false
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  minio-setup:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      echo '⏳ Waiting for MinIO to be ready...';
+      sleep 5;
+      echo 'Creating bucket: ${MLFLOW_BUCKET}';
+      /usr/bin/mc alias set minioserver http://minio:9000 ${MINIO_ACCESS_KEY} ${MINIO_SECRET_ACCESS_KEY};
+      /usr/bin/mc mb --ignore-existing minioserver/${MLFLOW_BUCKET};
+      echo '✅ Bucket created successfully';
+      "
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY}
+      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_ACCESS_KEY}
+
+volumes:
+  postgres_data:
+  minio_data:

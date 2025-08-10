@@ -4,21 +4,9 @@ version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "baynext-ml-cli",
-    "baynext-ml-server",
-    "baynext-ml-training",
-    "baynext-ml-utils",
+    "google-meridian>=1.1.4",
+    "mlflow-skinny>=3.2.0",
 ]
-
-[tool.uv.workspace]
-members = ["packages/*"]
-
-[tool.uv.sources]
-# uv add ./packages/* --editable 
-baynext-ml-cli = { workspace = true }
-baynext-ml-server = { workspace = true }
-baynext-ml-training = { workspace = true }
-baynext-ml-utils = { workspace = true }
 
 [dependency-groups]
 dev = [

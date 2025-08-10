@@ -11,6 +11,3 @@ WORKDIR /app
 RUN uv sync --frozen --no-cache
 
 ENTRYPOINT [ "uv", "run", "main.py" ]
-
-# Run the application.
-CMD ["--help"]
