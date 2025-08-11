@@ -1,0 +1,27 @@
+run_name: my_run
+
+config:
+  log_metrics: true
+  log_system_metrics: true
+
+load:
+  source: https://raw.githubusercontent.com/google/meridian/refs/heads/main/meridian/data/simulated_data/csv/geo_media.csv
+  coords:
+    time: time
+    geo: geo
+    population: population
+    kpi: conversions
+    revenue_per_kpi: revenue_per_kpi
+    controls:
+      - sentiment_score_control
+      - competitor_activity_score_control
+
+train:
+  prior:
+    n_draws: 100
+
+  posterior:
+    n_chains: 7
+    n_adapt: 500
+    n_burnin: 500
+    n_keep: 1000

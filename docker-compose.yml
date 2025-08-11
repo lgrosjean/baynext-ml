@@ -33,9 +33,9 @@ services:
       - MLFLOW_PORT=${MLFLOW_PORT}
       - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_ACCESS_KEY}
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9002
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
       - MLFLOW_S3_IGNORE_TLS=true
-    command: mlflow server 
+    command: mlflow server --serve-artifacts --artifacts-destination s3://${MLFLOW_BUCKET}
     depends_on:
       - postgres
       - minio-setup
