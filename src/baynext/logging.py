@@ -40,8 +40,6 @@ class BaynextLogger(logging.Logger):
             self.addHandler(stream_handler)
             self.addHandler(file_handler)
 
-        self.start()
-
     @property
     def _prefix(self) -> str:
         """Return the log prefix for the current run."""
@@ -54,10 +52,6 @@ class BaynextLogger(logging.Logger):
     def set_step(self, step: Step) -> None:
         """Set the current step for logging."""
         self.step = step
-
-    def start(self) -> None:
-        """Start the logging process."""
-        self.info("⚡️ Starting Baynext ML pipeline")
 
     def load(self) -> None:
         """Start the loading step."""
@@ -78,7 +72,3 @@ class BaynextLogger(logging.Logger):
         """Start the visualization step."""
         self.set_step("visualize")
         self.info("📈 Start visualizing model...")
-
-    def end(self) -> None:
-        """End the pipeline."""
-        self.info("✅ Baynext ML pipeline ended")
