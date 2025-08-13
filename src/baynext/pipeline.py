@@ -4,9 +4,7 @@ import os
 
 import mlflow
 from meridian.analysis import analyzer, visualizer
-from meridian.data.input_data import InputData
 from meridian.mlflow import autolog
-from meridian.model.model import Meridian
 
 from baynext import tasks
 from baynext.config import PipelineConfig
@@ -93,14 +91,14 @@ class Pipeline:
 
         self.logger.visualize()
         model_fit = visualizer.ModelFit(self.model_)
+        media_summary = visualizer.MediaSummary(self.model_)
+        media_effects = visualizer.MediaEffects(self.model_)
 
         log_chart(
             model_fit.plot_model_fit(),
             "model_fit.png",
         )
         self.logger.info("✅ Model fit chart logged.")
-
-        media_summary = visualizer.MediaSummary(self.model_)
 
         mlflow.log_table(
             media_summary.summary_table(),
@@ -137,6 +135,18 @@ class Pipeline:
             "roi_bar_chart.png",
         )
         self.logger.info("✅ ROI bar chart logged.")
+
+        log_chart(
+            media_effects.plot_response_curves(),
+            "response_curves.png",
+        )
+        self.logger.info("✅ Response curves chart logged.")
+
+        log_chart(
+            media_effects.plot_adstock_decay(),
+            "adstock_decay.png",
+        )
+        self.logger.info("✅ Adstock decay chart logged.")
 
     def run(self) -> None:
         """Run the entire pipeline."""

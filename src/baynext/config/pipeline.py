@@ -12,12 +12,10 @@ from pydantic_settings import (
     YamlConfigSettingsSource,
 )
 
-from baynext.config import (
-    AnalyzeConfig,
-    LoadConfig,
-    LogConfig,
-    TrainConfig,
-)
+from baynext.config.analyze import AnalyzeConfig
+from baynext.config.load import LoadConfig
+from baynext.config.log import LogConfig
+from baynext.config.train import TrainConfig
 
 _YAML_CONFIG_FILE = "baynext.yaml"
 

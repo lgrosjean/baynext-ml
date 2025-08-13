@@ -1,6 +1,7 @@
 """Defines logging config for Baynext training."""
 
 import logging
+from sys import stdout
 from typing import Literal
 
 import mlflow
@@ -33,7 +34,7 @@ class BaynextLogger(logging.Logger):
 
         if not self.handlers:
             formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-            stream_handler = logging.StreamHandler()
+            stream_handler = logging.StreamHandler(stdout)
             stream_handler.setFormatter(formatter)
             file_handler = logging.FileHandler("baynext.log")
             file_handler.setFormatter(formatter)
