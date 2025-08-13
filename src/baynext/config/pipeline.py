@@ -26,6 +26,12 @@ class PipelineConfig(BaseSettings):
     run_name: str | None = None
     message: str = Field(description="Message to describe the run.")
 
+    mlflow_tracking_uri: str = Field(
+        description="MLflow tracking URI.",
+        default="http://localhost:5001",
+    )
+    """MLflow tracking URI. (default: http://localhost:5001)"""
+
     load: LoadConfig
     train: TrainConfig = TrainConfig()
     analyze: AnalyzeConfig = AnalyzeConfig()

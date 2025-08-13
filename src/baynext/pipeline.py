@@ -184,7 +184,7 @@ def run_pipeline(pipeline_config: PipelineConfig) -> None:
     autolog.autolog(log_metrics=pipeline_config.log.metrics)
 
     # Set the MLflow tracking URI, default to localhost
-    mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5001"))
+    mlflow.set_tracking_uri(pipeline_config.mlflow_tracking_uri)
 
     # Start an MLflow run (optionally name it for better grouping)
     with mlflow.start_run(
