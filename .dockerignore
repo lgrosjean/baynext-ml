@@ -54,3 +54,9 @@ temp/
 # Data
 data/
 tests/
+
+*.log
+docker-compose.yml
+*.env.*
+*.egg-info/
+baynext.yaml
