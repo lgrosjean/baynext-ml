@@ -1,0 +1,54 @@
+# run_name: my_run
+
+log:
+  dataset: true
+  model: true
+  metrics: true
+  system_metrics: true
+
+load:
+  source:
+    type: csv
+    path: https://raw.githubusercontent.com/google/meridian/refs/heads/main/meridian/data/simulated_data/csv/geo_media.csv
+    name: geo_media
+  kpi_type: non_revenue
+  coords_to_columns:
+    time: time
+    geo: geo
+    population: population
+    kpi: conversions
+    revenue_per_kpi: revenue_per_conversion
+    media:
+      - Channel0_impression
+      - Channel1_impression
+      - Channel2_impression
+      - Channel3_impression
+    media_spend:
+      - Channel0_spend
+      - Channel1_spend
+      - Channel2_spend
+      - Channel3_spend
+    controls:
+      - sentiment_score_control
+      - competitor_activity_score_control
+  media_to_channel:
+    Channel0_impression: Channel0
+    Channel1_impression: Channel1
+    Channel2_impression: Channel2
+    Channel3_impression: Channel3
+  media_spend_to_channel:
+    Channel0_spend: Channel0
+    Channel1_spend: Channel1
+    Channel2_spend: Channel2
+    Channel3_spend: Channel3
+
+
+train:
+  sample_prior:
+    n_draws: 5
+
+  sample_posterior:
+    n_chains: 5
+    n_adapt: 10
+    n_burnin: 20
+    n_keep: 100

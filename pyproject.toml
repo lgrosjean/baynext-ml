@@ -8,7 +8,13 @@ dependencies = [
     "mlflow-skinny>=3.2.0",
     "psutil>=7.0.0",
     "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.1",
+    "vl-convert-python>=1.8.0",
 ]
+
+
+[project.scripts]
+baynext = "baynext.cli:cli"
 
 [dependency-groups]
 dev = [
@@ -16,3 +22,6 @@ dev = [
     "pytest-cov>=6.2.1",
     "pytest-mock>=3.14.1",
 ]
+
+[tool.uv]
+package = true
